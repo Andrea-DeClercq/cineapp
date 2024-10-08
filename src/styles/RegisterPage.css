@@ -1,0 +1,61 @@
+/* Styles pour le body pour centrer le formulaire */
+body {
+  height: 100vh; /* Hauteur de la fenêtre */
+  margin: 0; /* Pas de marges */
+  display: flex; /* Utilisation de flexbox */
+  justify-content: center; /* Centrer horizontalement */
+  align-items: center; /* Centrer verticalement */
+  background-color: #141414; /* Fond sombre pour un aspect Netflix */
+}
+
+/* Styles pour le conteneur du formulaire */
+.form-container {
+  background-color: rgba(20, 20, 20, 0.9); /* Fond sombre avec transparence */
+  border-radius: 8px; /* Coins arrondis */
+  padding: 20px; /* Espacement intérieur */
+  max-width: 400px; /* Largeur maximale */
+  width: 100%; /* Prendre toute la largeur possible */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8); /* Ombre pour un effet de profondeur */
+  text-align: center; /* Centrer le texte à l'intérieur de la div */
+}
+
+/* Styles des champs d'entrée */
+.input-field {
+  width: 100%; /* Prendre toute la largeur du conteneur */
+  max-width: 300px; /* Largeur fixe pour les inputs */
+  padding: 10px; /* Espacement intérieur */
+  margin: 10px auto; /* Marges auto pour centrer */
+  border: 1px solid #555; /* Bordure sombre */
+  border-radius: 5px; /* Coins arrondis */
+  background-color: #222; /* Fond du champ sombre */
+  color: white; /* Texte blanc */
+  font-size: 16px; /* Taille de police */
+}
+
+/* Styles pour le bouton */
+.submit-button {
+  background-color: #e50914; /* Rouge Netflix */
+  color: white; /* Texte blanc */
+  border: none; /* Pas de bordure */
+  border-radius: 5px; /* Coins arrondis */
+  padding: 10px 20px; /* Espacement intérieur */
+  font-size: 16px; /* Taille de police */
+  font-weight: bold; /* Épaisseur du texte */
+  cursor: pointer; /* Curseur en main */
+  transition: background-color 0.3s, transform 0.3s; /* Transition pour les effets */
+  max-width: 300px; /* Largeur fixe pour le bouton */
+  margin: 10px auto; /* Marges auto pour centrer */
+  display: block; /* Faire du bouton un bloc pour le centrage */
+}
+
+.submit-button:hover {
+  background-color: #f40612; /* Couleur légèrement plus foncée au survol */
+  transform: scale(1.05); /* Agrandissement au survol */
+}
+
+/* Autres styles pour le lien de redirection */
+.redirect-link {
+  color: #e50914; /* Lien en rouge Netflix */
+  display: block; /* Faire du lien un bloc */
+  margin-top: 10px; /* Espacement supérieur */
+}
