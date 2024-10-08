@@ -1,57 +1,66 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-  }
-  
-  .home-container {
-    position: relative;
-    height: 100vh; /* Prendre toute la hauteur de la fenêtre */
-    overflow: hidden;
-  }
-  
-  .video-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  }
-  
-  .background-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%; /* 100% de la largeur de la fenêtre */
-    height: 100%; /* 100% de la hauteur de la fenêtre */
-    transform: translate(-50%, -50%); /* Centrer la vidéo */
-    pointer-events: none; /* Empêche l'interaction avec la vidéo */
-  }
-  
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    z-index: 1; /* Positionne le texte au-dessus de la vidéo */
-    text-align: center;
-  }
-  
-  .button-container {
-    margin-top: 20px;
-  }
-  
-  button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
+/* HomePage.css */
+
+.home-container {
+  position: relative;
+  overflow: hidden; /* Empêche le débordement */
+  height: 100vh; /* Prend toute la hauteur de la fenêtre */
+  width: 100vw; /* Prend toute la largeur de la fenêtre */
+}
+
+.video-background {
+  position: absolute; /* Positionne la vidéo en fond */
+  top: 0; /* Aligne en haut */
+  left: 0; /* Aligne à gauche */
+  width: 100%; /* Prend toute la largeur */
+  height: 100%; /* Prend toute la hauteur */
+  z-index: 0; /* Met la vidéo derrière le contenu */
+  pointer-events: none; /* Évite les interactions avec la vidéo */
+}
+
+.background-video {
+  position: absolute; /* Assure que la vidéo est en position absolue */
+  top: 0;
+  left: 0;
+  width: 100%; /* S'assure que la vidéo occupe toute la largeur */
+  height: 100%; /* S'assure que la vidéo occupe toute la hauteur */
+  object-fit: cover; /* Adapte la vidéo à l'écran */
+}
+
+.overlay {
+  position: relative; /* Permet au texte d'apparaître par-dessus la vidéo */
+  z-index: 1; /* Met le texte devant la vidéo */
+  display: flex; /* Utilisation de flexbox pour centrer le contenu */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* Prend toute la hauteur */
+  color: white; /* Couleur du texte */
+  text-align: center; /* Centre le texte */
+}
+
+.button-container {
+  margin-top: 20px; /* Marge entre le texte et les boutons */
+}
+
+/* Style pour les boutons type Netflix */
+.login-button,
+.register-button {
+  display: inline-block;
+  background-color: #e50914;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none; /* Retire le soulignement */
+  margin: 10px; /* Ajoute de la marge entre les boutons */
+}
+
+.login-button:hover,
+.register-button:hover {
+  background-color: #b20710; /* Rouge assombri pour l'effet de survol */
+}

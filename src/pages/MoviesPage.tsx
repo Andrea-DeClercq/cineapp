@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import useMovies from "../hooks/useMovies";
 import "../styles/MoviesPage.css";
 
 interface Movie {
@@ -9,27 +9,7 @@ interface Movie {
 }
 
 const MoviesPage: React.FC = () => {
-    const [user, setUser] = useState<any>(null);
-    const [movies, setMovies] = useState<any>([]);
-
-
-    useEffect(() => {
-        const loggedInUser = localStorage.getItem('userLoggedIn');
-        if (loggedInUser) {
-            setUser(JSON.parse(loggedInUser));
-            const fetchMovies = async () => {
-                try {
-                    const apiKey = '580c5e12f078a8a9ea2d0ce91a57846e';
-                    const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=fr-FR&page=1`);
-                    setMovies(response.data.results);
-                } catch (error) {
-                    console.error("Erreur lors de la récupération des films:", error);
-                }
-            };
-
-            fetchMovies();
-        }
-    }, []);
+    const {user, movies} = useMovies()
 
     return (
         <div className="movies-container">
