@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import "../styles/MovieModal.css";
+// import "../styles/MovieModal.css";
 import { fetchTrailers, fetchGenres } from "../services/apiService";
 
 const MovieModal: React.FC<{ movie: any; onClose: () => void }> = ({ movie, onClose }) => {
@@ -32,35 +32,33 @@ const MovieModal: React.FC<{ movie: any; onClose: () => void }> = ({ movie, onCl
     }, [genres, movie.genre_ids]);
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <span className="close-button" onClick={() => {
-                        onClose();
-                        setIsFetched(false);
-                    }}>
-                    &times;
-                </span>
-                <h2>{movie.title}</h2>
-                <p><strong>Synopsis:</strong> {movie.overview}</p>
-                <p><strong>Genres:</strong> {listGenres}</p>
-                <p><strong>Date de sortie:</strong> {movie.release_date}</p>
-                <p><strong>Note:</strong> {movie.vote_average}/10</p>
-                {randomTrailer && (
-                    <div className="trailer-container">
-                        <iframe
-                            width="100%"
-                            height="315"
-                            src={`https://www.youtube.com/embed/${randomTrailer.key}`}
-                            title="Trailer"
-                            frameBorder="0"
-                            allowFullScreen
-                        />
-                    </div>
-                )}
-                
-            </div>
+        <div className="fixed inset-0 flex justify-center items-center z-50 w-screen h-screen bg-black bg-opacity-80">
+          <div className="bg-gray-900 w-11/12 md:w-1/3 lg:w-1/4 p-6 rounded-lg shadow-lg transform transition-all duration-300">
+            <span className="close-button text-3xl leading-none cursor-pointer text-white hover:text-red-500" onClick={() => {
+                onClose();
+                setIsFetched(false);
+              }}>
+              &times;
+            </span>
+            <h2 className="text-2xl font-bold text-white mb-2"><strong>{movie.title}</strong></h2>
+            <p className="text-gray-300 mb-4"><strong>Synopsis:</strong> {movie.overview}</p>
+            <p className="text-gray-400 mb-2"><strong>Genres:</strong> {listGenres}</p>
+            <p className="text-gray-400 mb-2"><strong>Date de sortie:</strong> {movie.release_date}</p>
+            <p className="text-gray-400 mb-4"><strong>Note:</strong> {movie.vote_average.toFixed(1)}/10</p>
+            {randomTrailer && (
+              <div className="aspect-w-16 aspect-h-9">
+                <iframe
+                  className="w-full h-full rounded-lg border-2 border-gray-700"
+                  src={`https://www.youtube.com/embed/${randomTrailer.key}`}
+                  title="Trailer"
+                  frameBorder="0"
+                  allowFullScreen
+                />
+              </div>
+            )}
+          </div>
         </div>
-    );
+      );      
 };
 
 export default MovieModal;
