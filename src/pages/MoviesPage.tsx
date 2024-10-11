@@ -1,29 +1,66 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect } from "react";
 import useMovies from "../hooks/useMovies";
 import "../styles/MoviesPage.css";
 import MovieModal from "../components/MovieModal";
 import Navbar from "../components/Navbar";  
-
-interface Movie {
-    id: number,
-    title: string,
-    poster_path: string
-}
+import { fetchGenres, fetchLangues } from "../services/apiService";
 
 const MoviesPage: React.FC = memo(() => {
-    const {user, movies} = useMovies()
-    const [selectedMovie, setSelectedMovie] = useState<any>(null)
+    const { user, movies, getMoviesByFilters } = useMovies();
+    const [selectedMovie, setSelectedMovie] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedYear, setSelectedYear] = useState<string | null>(null);
+    const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+    const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+    const [genres, setGenres] = useState<any[]>([]);
+    const [languages, setLanguages] = useState<any[]>([]);
+
     const handleMovieClick = (movie: any) => {
-        setSelectedMovie(movie)
+        setSelectedMovie(movie);
         setIsModalOpen(true);
-    }
+    };
 
     const closeModal = () => {
         setSelectedMovie(null);
         setIsModalOpen(false);
-    }
+    };
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+
+    useEffect(() => {
+        const fetchFilters = async () => {
+            const fetchedGenres = await fetchGenres();
+            let fetchedLanguages = await fetchLangues();
+            fetchedLanguages = fetchedLanguages.sort((a: any, b: any) => 
+                a.english_name.localeCompare(b.english_name)
+            );
+          
+
+            setGenres(fetchedGenres);
+            setLanguages(fetchedLanguages);
+        };
+
+        fetchFilters();
+    }, []);
+
+    useEffect(() => {
+      getMoviesByFilters({ 
+          year: selectedYear || undefined,
+          genre: selectedGenre || undefined, 
+          language: selectedLanguage || undefined 
+      });
+  }, [selectedYear, selectedGenre, selectedLanguage]);
+
+    const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => setSelectedYear(e.target.value);
+    const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => setSelectedGenre(e.target.value);
+    const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => setSelectedLanguage(e.target.value);
+
+    const filteredMovies = movies.filter((movie: any) =>
+        movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="p-4 bg-gray-800 min-h-screen">
@@ -31,9 +68,42 @@ const MoviesPage: React.FC = memo(() => {
             <>
                 <Navbar username={user.username} />  
                 <div className="p-4">
-                  <h2 className="text-3xl font-bold text-white mb-6">Films populaires</h2>
+                    <div className="flex">
+                        <h2 className="text-3xl font-bold text-white mb-6">Films populaires</h2>
+                        <input
+                            type="text"
+                            placeholder="Rechercher un film..."
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="mb-4 p-2 rounded ml-auto"
+                        />
+                    </div>
+                    <div className="my-4 flex flex-col sm:flex-row gap-4">
+                        <select className="bg-gray-700 text-white p-2 rounded" onChange={handleYearChange} value={selectedYear || ""}>
+                            <option value="">Toutes les années</option>
+                            {Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                <option key={year} value={year}>{year}</option>
+                            ))}
+                        </select>
+
+                        <select className="bg-gray-700 text-white p-2 rounded" onChange={handleGenreChange} value={selectedGenre || ""}>
+                            <option value="">Tous les genres</option>
+                            {genres.map(genre => (
+                                <option key={genre.id} value={genre.id}>{genre.name}</option>
+                            ))}
+                        </select>
+
+                        <select className="bg-gray-700 text-white p-2 rounded" onChange={handleLanguageChange} value={selectedLanguage || ""}>
+                            <option value="">Toutes les langues</option>
+                            {languages.map(language => (
+                                <option key={language.iso_639_1} value={language.iso_639_1}>
+                                    {language.english_name} ({language.iso_639_1})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {movies.map((movie: Movie) => (
+                    {filteredMovies.map((movie) => (
                       <div 
                         key={movie.id} 
                         className="movie-item cursor-pointer transition-transform transform hover:scale-105"

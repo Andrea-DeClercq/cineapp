@@ -20,3 +20,21 @@ export const fetchGenres = async () => {
     const response = await axios.get(apiGenreUrl);
     return response.data.genres;
 }
+
+export const fetchLangues = async () => {
+    const apiLangueUrl = `https://api.themoviedb.org/3/configuration/languages?api_key=${API_KEY}`;
+    const response = await axios.get(apiLangueUrl);
+    return response.data
+}
+
+export const fetchMoviesByFilters = async ({ year, genre, language }: {year?: string, genre?: string, language?: string}) => {
+    const API_DISCOVER_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=fr-FR&sort_by=popularity.desc`
+    let url = API_DISCOVER_URL;
+
+    if (year) url += `&primary_release_year=${year}`;
+    if (genre) url += `&with_genres=${genre}`;
+    if (language) url += `&with_original_language=${language}`;
+
+    const response = await axios.get(url)
+    return response.data.results
+}
