@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
-const LoginPage: React.FC = () => {
+interface LoginPageProps {
+    onLoginSuccess?: () => void;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -15,8 +19,12 @@ const LoginPage: React.FC = () => {
             if (user.email === email && user.password === password) {
                 localStorage.setItem('userLoggedIn', JSON.stringify(user));
 
-                alert('Connexion réussie !');
-                window.location.href = "/movies";
+                if (onLoginSuccess) {
+                    onLoginSuccess();
+                } else {
+                    alert('Connexion réussie !');
+                    window.location.href = "/movies";
+                }
             } else {
                 setError('Email ou mot de passe incorrect');
             }
@@ -31,22 +39,32 @@ const LoginPage: React.FC = () => {
                 <h2 className="text-3xl font-bold text-white mb-6 text-center">Connexion</h2>
                 {error && <div className="mb-4 text-red-500">{error}</div>}
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <input
-                        type="email"
-                        className="input-field w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        className="input-field w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
-                        placeholder="Mot de passe"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-white mb-1">
+                            Email
+                        </label>
+                        <input
+                            id="email"
+                            type="email"
+                            className="input-field w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-white mb-1">
+                            Mot de passe
+                        </label>
+                        <input
+                            id="password"
+                            type="password"
+                            className="input-field w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+                            placeholder="Mot de passe"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
                     <button type="submit" className="submit-button w-full p-3 bg-red-600 text-white font-semibold rounded-md transition-colors duration-300 hover:bg-red-500">
                         Se connecter
                     </button>

@@ -1,11 +1,24 @@
-import React, { useState } from "react";
-import Navbar from "../components/Navbar"; // Importer la Navbar
-import MovieModal from "../components/MovieModal"; // Importer MovieModal
+import React, { useState, useEffect } from "react";
+import Navbar from "../components/Navbar";
+import MovieModal from "../components/MovieModal";
 
 const ProfilePage: React.FC = () => {
-    const user = JSON.parse(localStorage.getItem("userLoggedIn") || "{}");
+    // Charger les informations de l'utilisateur depuis le localStorage
+    const storedUser = JSON.parse(localStorage.getItem("userLoggedIn") || "{}");
+    const [user, setUser] = useState<any>(storedUser);
+    const [username, setUsername] = useState(user.username || "");
+    const [email, setEmail] = useState(user.email || "");
+    const [password, setPassword] = useState("");
+
     const [selectedMovie, setSelectedMovie] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleSaveChanges = () => {
+        const updatedUser = { ...user, username, email, password };
+        localStorage.setItem("userLoggedIn", JSON.stringify(updatedUser));
+        setUser(updatedUser);
+        alert("Modifications sauvegardées !");
+    };
 
     const handleMovieClick = (movie: any) => {
         setSelectedMovie(movie);
@@ -21,21 +34,54 @@ const ProfilePage: React.FC = () => {
         if (window.confirm("Êtes-vous sûr de vouloir vider vos films favoris ?")) {
             const updatedUser = { ...user, favoriteMovies: [] };
             localStorage.setItem("userLoggedIn", JSON.stringify(updatedUser));
-            window.location.reload(); // Recharger la page pour mettre à jour la liste des favoris
+            setUser(updatedUser); // Mettre à jour l'état sans recharger la page
         }
     };
 
     return (
         <div className="min-h-screen bg-gray-800">
-            {/* Ajout de la Navbar */}
             <Navbar username={user.username} />
 
             <div className="p-4">
                 <h2 className="text-3xl font-bold text-white mb-4">Mon Profil</h2>
-                <div className="text-white">
-                    <p><strong>Nom d'utilisateur :</strong> {user.username}</p>
-                    <p><strong>Email :</strong> {user.email}</p>
-                </div>
+                <form className="space-y-4">
+                    <div>
+                        <label className="text-white block">Nom d'utilisateur :</label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="p-2 rounded bg-gray-700 text-white w-full"
+                        />
+                    </div>
+                    <div>
+                        <label className="text-white block">Email :</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="p-2 rounded bg-gray-700 text-white w-full"
+                        />
+                    </div>
+                    <div>
+                        <label className="text-white block">Mot de passe :</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="p-2 rounded bg-gray-700 text-white w-full"
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        onClick={handleSaveChanges}
+                        className="bg-green-600 text-white font-semibold py-2 px-4 rounded hover:bg-green-500"
+                    >
+                        Sauvegarder les modifications
+                    </button>
+                </form>
+
+                {/* Liste des films favoris */}
                 <h3 className="text-2xl font-bold text-white mt-6">Films favoris</h3>
                 <button
                     className="mt-4 bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 hover:bg-red-500"

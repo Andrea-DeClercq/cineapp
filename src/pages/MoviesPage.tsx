@@ -47,12 +47,25 @@ const MoviesPage: React.FC = memo(() => {
     }, []);
 
     useEffect(() => {
-      getMoviesByFilters({ 
+        const savedFilters = localStorage.getItem("movieFilters");
+        if (savedFilters) {
+            const filters = JSON.parse(savedFilters);
+            setSelectedYear(filters.year || undefined);
+            setSelectedGenre(filters.genre || undefined);
+            setSelectedLanguage(filters.language || undefined);
+        }
+    }, []);
+
+    useEffect(() => {
+      const filters = {
           year: selectedYear || undefined,
-          genre: selectedGenre || undefined, 
-          language: selectedLanguage || undefined 
-      });
-  }, [selectedYear, selectedGenre, selectedLanguage]);
+          genre: selectedGenre || undefined,
+          language: selectedLanguage || undefined,
+      };
+        localStorage.setItem("movieFilters", JSON.stringify(filters));
+  
+      getMoviesByFilters(filters);
+  }, [selectedYear, selectedGenre, selectedLanguage, getMoviesByFilters]);
 
     const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => setSelectedYear(e.target.value);
     const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => setSelectedGenre(e.target.value);
