@@ -1,14 +1,28 @@
 import React, { useState } from "react";
 
 interface LoginPageProps {
-    onLoginSuccess?: () => void;
+    onLoginSuccess?: () => void;  // Optional callback triggered upon successful login
 }
 
+/**
+ * LoginPage component handles user login functionality.
+ * Allows users to enter email and password, verifies credentials, 
+ * and stores session information in localStorage upon successful login.
+ * 
+ * @param {LoginPageProps} props - Contains optional callback for login success handling.
+ * @returns {JSX.Element} - The rendered login page.
+ */
 const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [email, setEmail] = useState('');  // State for the email input field
+    const [password, setPassword] = useState('');  // State for the password input field
+    const [error, setError] = useState('');  // State to display login error messages
 
+    /**
+     * handleSubmit processes the form submission by validating the user's credentials.
+     * If credentials match, it stores user data in localStorage and redirects to movies page.
+     * 
+     * @param {React.FormEvent} e - The form submission event.
+     */
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -17,8 +31,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             const user = JSON.parse(storedUser);
 
             if (user.email === email && user.password === password) {
-                localStorage.setItem('userLoggedIn', JSON.stringify(user));
+                localStorage.setItem('userLoggedIn', JSON.stringify(user));  // Store login session
 
+                // Trigger callback if provided, otherwise redirect to movies page
                 if (onLoginSuccess) {
                     onLoginSuccess();
                 } else {
@@ -26,10 +41,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                     window.location.href = "/movies";
                 }
             } else {
-                setError('Email ou mot de passe incorrect');
+                setError('Email ou mot de passe incorrect');  // Set error message if credentials don't match
             }
         } else {
-            setError('Aucun utilisateur trouvé. Veuillez vous inscrire d\'abord.');
+            setError('Aucun utilisateur trouvé. Veuillez vous inscrire d\'abord.');  // Prompt if no user exists
         }
     };
 
@@ -52,6 +67,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
+
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-white mb-1">
                             Mot de passe
@@ -65,10 +81,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
+
                     <button type="submit" className="submit-button w-full p-3 bg-red-600 text-white font-semibold rounded-md transition-colors duration-300 hover:bg-red-500">
                         Se connecter
                     </button>
                 </form>
+                
                 <div className="mt-4 text-center">
                     <a href="/register" className="redirect-link text-red-400 hover:underline">
                         Pas de compte ? S'inscrire

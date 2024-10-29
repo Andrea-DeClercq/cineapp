@@ -2,17 +2,23 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import MovieModal from "../components/MovieModal";
 
+/**
+ * ProfilePage component allows users to view and update their profile information, manage their favorite movies,
+ * and access movie details in a modal.
+ */
 const ProfilePage: React.FC = () => {
-    // Charger les informations de l'utilisateur depuis le localStorage
+    // Load user information from localStorage
     const storedUser = JSON.parse(localStorage.getItem("userLoggedIn") || "{}");
     const [user, setUser] = useState<any>(storedUser);
     const [username, setUsername] = useState(user.username || "");
     const [email, setEmail] = useState(user.email || "");
     const [password, setPassword] = useState("");
+    const [selectedMovie, setSelectedMovie] = useState<any>(null);  // Movie selected to display in modal
+    const [isModalOpen, setIsModalOpen] = useState(false);  // Modal visibility state
 
-    const [selectedMovie, setSelectedMovie] = useState<any>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
+    /**
+     * Saves changes to the user's profile information in localStorage.
+     */
     const handleSaveChanges = () => {
         const updatedUser = { ...user, username, email, password };
         localStorage.setItem("userLoggedIn", JSON.stringify(updatedUser));
@@ -20,27 +26,36 @@ const ProfilePage: React.FC = () => {
         alert("Modifications sauvegardées !");
     };
 
+    /**
+     * Opens the modal with the selected movie's details.
+     * 
+     * @param {any} movie - The movie object to display in the modal.
+     */
     const handleMovieClick = (movie: any) => {
         setSelectedMovie(movie);
         setIsModalOpen(true);
     };
 
+    /** Closes the movie details modal. */
     const closeModal = () => {
         setSelectedMovie(null);
         setIsModalOpen(false);
     };
 
+    /**
+     * Clears the user's favorite movies list and updates localStorage.
+     */
     const clearFavorites = () => {
         if (window.confirm("Êtes-vous sûr de vouloir vider vos films favoris ?")) {
             const updatedUser = { ...user, favoriteMovies: [] };
             localStorage.setItem("userLoggedIn", JSON.stringify(updatedUser));
-            setUser(updatedUser); // Mettre à jour l'état sans recharger la page
+            setUser(updatedUser); // Update state without page reload
         }
     };
 
     return (
         <div className="min-h-screen bg-gray-800">
-            <Navbar username={user.username} />
+            <Navbar username={user.username} />  {/* Navbar component displaying the username */}
 
             <div className="p-4">
                 <h2 className="text-3xl font-bold text-white mb-4">Mon Profil</h2>
@@ -81,7 +96,7 @@ const ProfilePage: React.FC = () => {
                     </button>
                 </form>
 
-                {/* Liste des films favoris */}
+                {/* Favorite movies section */}
                 <h3 className="text-2xl font-bold text-white mt-6">Films favoris</h3>
                 <button
                     className="mt-4 bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 hover:bg-red-500"
@@ -112,7 +127,7 @@ const ProfilePage: React.FC = () => {
 
                 {/* Movie Modal */}
                 {isModalOpen && selectedMovie && (
-                    <MovieModal movie={selectedMovie} onClose={closeModal} />
+                    <MovieModal movie={selectedMovie} onClose={closeModal} />  // Modal to display selected movie details
                 )}
             </div>
         </div>

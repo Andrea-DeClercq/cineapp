@@ -1,27 +1,33 @@
 import React, { useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'; // Import the uuid function to generate unique IDs
 
 const RegisterPage: React.FC = () => {
+    // State variables to hold user input for username, email, and password
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    // Function to handle form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Create a new user object with a unique ID and the input values
         const newUser = {
-            id: uuidv4(),
+            id: uuidv4(), // Generate a unique ID for the user
             username,
             email,
             password,
         };
 
+        // Store the new user object in local storage
         localStorage.setItem('user', JSON.stringify(newUser));
 
+        // Clear the input fields
         setUsername('');
         setEmail('');
         setPassword('');
 
+        // Notify the user of successful registration and redirect the user to the login page
         alert('Inscription réussie !');
         window.location.href = '/login';
     };
@@ -35,24 +41,24 @@ const RegisterPage: React.FC = () => {
                         type="text"
                         className="input-field w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
                         placeholder="Nom d'utilisateur"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={username} // Value bound to the username state
+                        onChange={(e) => setUsername(e.target.value)} // Update username state on input change
                         required
                     />
                     <input
                         type="email"
                         className="input-field w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
                         placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={email} // Value bound to the email state
+                        onChange={(e) => setEmail(e.target.value)} // Update email state on input change
                         required
                     />
                     <input
                         type="password"
                         className="input-field w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
                         placeholder="Mot de passe"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={password} // Value bound to the password state
+                        onChange={(e) => setPassword(e.target.value)} // Update password state on input change
                         required
                     />
                     <button type="submit" className="submit-button w-full p-3 bg-red-600 text-white font-semibold rounded-md transition-colors duration-300 hover:bg-red-500">
