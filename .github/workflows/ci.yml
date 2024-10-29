@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI
 
 on:
   push:
@@ -11,13 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Hello World Step
-        run: echo "Hello ZE WorldOOH."
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -27,8 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Load environment variables
+        run: cp .env.test .env
+
       - name: Run tests
         run: npm test
-
-      - name: Build the application
-        run: npm run build
+        env:
+          REACT_APP_TMDB_API_KEY: ${{ secrets.REACT_APP_TMDB_API_KEY }}
